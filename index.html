@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>강원대 순환버스</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 고정된 이미지 -->
+        <img id="campusMap" src="map-image.png" alt="강원대 순환버스 노선도">
+        
+        <!-- 마커 컨테이너 -->
+        <div id="markerContainer"></div>
+        
+        <!-- 도착시간 모달 -->
+        <div id="timeModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h3 id="stopName">정류장 이름</h3>
+                <ul id="arrivalList"></ul>
+            </div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
