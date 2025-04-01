@@ -11,8 +11,8 @@ const busData = {
                 "8회차: 16:00",	
                 "9회차: 17:30",	
                 "10회차: 18:00"]  ,
-        "x":470,
-        "y":480
+        "x":670,
+        "y":550
 
     },
 
@@ -28,8 +28,8 @@ const busData = {
                 "8회차: 16:02",	
                 "9회차: 17:32",
                 "10회차: 18:02"	],
-        "x":1000,
-        "y":480
+        "x":1200,
+        "y":590
     },
     "3":{
         "name":"3.동생대 2호관",
@@ -43,8 +43,8 @@ const busData = {
                 "8회차: 16:04"	,
                 "9회차: 17:34"	,
                 "10회차: 18:04"	],
-        "x":1070,
-        "y":230
+        "x":1270,
+        "y":290
     },
     "4":{
         "name":"4.경영대 2호관",
@@ -58,8 +58,8 @@ const busData = {
                 "8회차: 16:06"	,
                 "9회차: 17:36"	,
                 "10회차: 18:06"	],
-        "x":800,
-        "y":110
+        "x":1000,
+        "y":180
     },
     "5":{
         "name":"5.미래 광장",
@@ -73,8 +73,8 @@ const busData = {
                 "8회차: 16:08"	,
                 "9회차: 17:38"	,
                 "10회차: 18:08"	],
-                "x":670,
-                "y":60
+                "x":800,
+                "y":100
     },
     "6":{
         "name":"6.백록관",
@@ -88,8 +88,8 @@ const busData = {
                 "8회차: 16:10"	,
                 "9회차: 17:40"	,
                 "10회차: 18:10"	],
-                "x":450,
-                "y":200
+                "x":640,
+                "y":260
     },
     "7":{
         "name":"7.새롬관(회차)",
@@ -103,8 +103,8 @@ const busData = {
                 "8회차: 16:12"	,
                 "9회차: 17:42"	,
                 "10회차: 18:12"	],
-                "x":570,
-                "y":460
+                "x":770,
+                "y":530
     },
     "8":{
         "name":"8.함인섭 광장",
@@ -118,8 +118,8 @@ const busData = {
                 "8회차: 16:14"	,
                 "9회차: 17:44"	,
                 "10회차: 18:14"	],
-                "x":500,
-                "y":240
+                "x":720,
+                "y":300
     },
     "9":{
         "name":"9.미래 광장",
@@ -133,8 +133,8 @@ const busData = {
                 "8회차: 16:16"	,
                 "9회차: 17:46"	,
                 "10회차: 18:16"	],
-                "x":600,
-                "y":130
+                "x":780,
+                "y":195
     },
     "10":{
         "name":"10.글로벌 경영관",
@@ -146,10 +146,10 @@ const busData = {
                 "6회차: 13:18"	,
                 "7회차: 14:48"	,
                 "8회차: 16:18"	,
-                "9회차: 17:48"	,
+                "9회차: 17:48",
                 "10회차: 18:18"	],
-                "x":820,
-                "y":200
+                "x":1000,
+                "y":265
     },
     "11":{
         "name":"11.의생대",
@@ -163,8 +163,8 @@ const busData = {
                 "8회차: 16:20"	,
                 "9회차: 17:50"	,
                 "10회차: 18:20"	],
-                "x":1050,
-                "y":330
+                "x":1250,
+                "y":400
     },
     "12":{
         "name":"12.미래 도서관",
@@ -178,8 +178,8 @@ const busData = {
                 "8회차: 16:22"	,
                 "9회차: 17:52"	,
                 "10회차: 18:22"	],
-                "x":950,
-                "y":425
+                "x":1150,
+                "y":490
     },
     "13":{
         "name":"13.새롬관",
@@ -193,8 +193,8 @@ const busData = {
                 "8회차: 16:24"	,
                 "9회차: 17:54"	,
                 "10회차: 18:24"	],
-                "x":565,
-                "y":530
+                "x":770,
+                "y":600
     }
 }
 
@@ -203,22 +203,61 @@ document.getElementById('campusMap').onload = function() {
     loadMarkers();
 };
 
-// 정류장 마커 생성 함수
+// 수정된 마커 생성 함수
 function loadMarkers() {
     const markerContainer = document.getElementById('markerContainer');
+    const mapImage = document.getElementById('campusMap');
+    
+    // 원본 이미지 크기
+    const originalWidth = 736;
+    const originalHeight = 703;
+    
+    function updateMarkers() {
+        const rect = mapImage.getBoundingClientRect();
+        const currentWidth = rect.width;
+        const currentHeight = rect.height;
+    
+        // 모든 마커 위치 업데이트
+        Array.from(markerContainer.querySelectorAll('.marker')).forEach(marker => {
+            const stopId = marker.dataset.stopId;
+            const stop = busData[stopId];
+    
+            // 원본 이미지에서의 비율 계산
+            const ratioX = stop.x / originalWidth;
+            const ratioY = stop.y / originalHeight;
+    
+            // 컨테이너 내부의 상대적 위치로 계산
+            const newX = ratioX * currentWidth;
+            const newY = ratioY * currentHeight;
+    
+            // 마커 위치 설정
+            marker.style.left = `${newX}px`;
+            marker.style.top = `${newY}px`;
+        });
+    }
+    
+    // 마커 생성
     Object.keys(busData).forEach(stopId => {
         const stop = busData[stopId];
         const marker = document.createElement('div');
         marker.className = 'marker';
-        marker.style.left = `${stop.x}px`;
-        marker.style.top = `${stop.y}px`;
         marker.dataset.stopId = stopId;
         marker.addEventListener('click', () => showArrivalTimes(stop));
         markerContainer.appendChild(marker);
     });
+    
+    // 초기 마커 위치 설정
+    updateMarkers();
+    
+    // 창 크기 변경 시 마커 위치 업데이트
+    window.addEventListener('resize', updateMarkers);
+    
+    // 이미지 크기 변경 감지
+    const resizeObserver = new ResizeObserver(updateMarkers);
+    resizeObserver.observe(mapImage);
 }
 
-// 모델 표시 함수
+// 모달 표시 함수
 function showArrivalTimes(stop) {
     const modal = document.getElementById('timeModal');
     document.getElementById('stopName').textContent = stop.name;
@@ -227,7 +266,7 @@ function showArrivalTimes(stop) {
     modal.style.display = 'block';
 }
 
-// 모델  닫기
+// 모달 닫기
 document.querySelector('.close').addEventListener('click', () => {
     document.getElementById('timeModal').style.display = 'none';
 });
